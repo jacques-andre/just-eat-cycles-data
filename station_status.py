@@ -58,11 +58,22 @@ def make_station(bikes_aval,docks,station_name,station_id):
     return station
 
 def find_biggest_station() -> int:
+    # finds the biggest station based on how many number of bikes avaliable
     biggest = 0
     max_station = None
     for station in stations:
         if station.bikes_aval >= biggest:
             biggest = station.bikes_aval
+            max_station = station
+    return max_station
+
+def find_biggest_station_docks() -> int:
+    # finds the biggest station based on how many number of docks avaliable
+    biggest = 0
+    max_station = None
+    for station in stations:
+        if station.docks >= biggest:
+            biggest = station.docks
             max_station = station
     return max_station
 
@@ -73,7 +84,9 @@ def print_all_stations():
 def main():
     get_station_status()
     biggest_station = find_biggest_station()
-    print(f"The biggest station is: {biggest_station.station_name}, bikes_aval: {biggest_station.bikes_aval}/{biggest_station.docks}")
+    print(f"Most bikes: {biggest_station.station_name}, bikes_aval: {biggest_station.bikes_aval}/{biggest_station.docks}")
+    biggest_station_docks = find_biggest_station_docks()
+    print(f"Most docks: {biggest_station_docks.station_name}, bikes_aval: {biggest_station_docks.bikes_aval}/{biggest_station_docks.docks}")
     # print_all_stations()
 
 main()
