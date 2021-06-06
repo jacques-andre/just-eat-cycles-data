@@ -32,14 +32,13 @@ class Station(object):
 
 def get_station_name(station_id: int) -> str:
     # returns station name from station id
-
     for station in station_info:
         # station vars
         current_station_id = station["station_id"]
 
         if current_station_id == str(station_id):
             return station["name"]
-    return "" # no station found
+    return None # no station found
 
 def get_station_status():
     # aggregates all stations from api into objects
