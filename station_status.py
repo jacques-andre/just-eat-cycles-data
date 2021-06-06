@@ -54,6 +54,7 @@ def get_station_status():
         stations.add(s)
 
 def make_station(bikes_aval,docks,station_name,station_id):
+    # creates a Station object
     station = Station(bikes_aval,docks,station_name,station_id)
     return station
 
@@ -82,11 +83,11 @@ def print_all_stations():
         print(s)
 
 def main():
+    # main entry point
     get_station_status()
     biggest_station = find_biggest_station()
     print(f"Most bikes: {biggest_station.station_name}, bikes_aval: {biggest_station.bikes_aval}/{biggest_station.docks}")
     biggest_station_docks = find_biggest_station_docks()
     print(f"Most docks: {biggest_station_docks.station_name}, bikes_aval: {biggest_station_docks.bikes_aval}/{biggest_station_docks.docks}")
-    # print_all_stations()
 
 main()
