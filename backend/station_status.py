@@ -1,6 +1,8 @@
 import requests
 import pprint
 import json
+from flask import Flask,jsonify
+from operator import attrgetter
 
 r = requests.get("https://gbfs.urbansharing.com/edinburghcyclehire.com/station_status.json")
 station_status_json = r.json()
@@ -12,7 +14,10 @@ station_data = station_status_json['data']['stations'] # avaliable bikes,docks
 station_info = station_information_json['data']['stations'] # station name,lat/lon,address
 
 
-stations = set() # holds individual stations
+stations = list() # holds Station objects for each station
+
+
+app = Flask(__name__)
 
 class Station(object):
     bikes_aval = 0
@@ -29,6 +34,9 @@ class Station(object):
     def __str__(self):
         return f"id: {self.station_id}, name: {self.station_name}, bikes_aval: {self.bikes_aval}/{self.docks}"
 
+    def toJSON(self):
+        return {"station_id": self.station_id, "station_name": self.station_name, "bikes_aval": self.bikes_aval, "docks": self.docks}
+
 
 def get_station_name(station_id: int) -> str:
     # returns station name from station id
@@ -40,7 +48,7 @@ def get_station_name(station_id: int) -> str:
             return station["name"]
     return None # no station found
 
-def get_station_status():
+def gen_stations():
     # aggregates all stations from api into objects
     for station in station_data:
         # station vars
@@ -49,44 +57,44 @@ def get_station_status():
         bikes_aval = station["num_bikes_available"]
         docks = station["num_docks_available"]
 
-        s = make_station(bikes_aval,docks,station_name,station_id)
-        stations.add(s)
+        s = make_station_object(bikes_aval,docks,station_name,station_id)
+        stations.append(s)
 
-def make_station(bikes_aval,docks,station_name,station_id):
+def make_station_object(bikes_aval,docks,station_name,station_id):
     # creates a Station object
     station = Station(bikes_aval,docks,station_name,station_id)
     return station
 
-def find_biggest_station() -> int:
-    # finds the biggest station based on how many number of bikes avaliable
+@app.route("/")
+def all_stations():
+    # returns all stations in json format
+    json_stations = list()
+    for s in stations:
+        json_stations.append(s.toJSON())
+    json_stations.sort(key=lambda x: x["bikes_aval"],reverse=True) # sorts in terms of bikes avaliable
+    return json.dumps(json_stations)
+
+@app.route("/biggest_station_bikes")
+def find_biggest_station():
+    # returns the biggest station based on how many number of bikes avaliable.
     biggest = 0
     max_station = None
     for station in stations:
         if station.bikes_aval >= biggest:
             biggest = station.bikes_aval
             max_station = station
-    return max_station
+    return max_station.toJSON()
 
-def find_biggest_station_docks() -> int:
-    # finds the biggest station based on how many number of docks avaliable
+@app.route("/biggest_station_docks")
+def find_biggest_station_docks():
+    # returns the biggest station based on how many number of docks avaliable.
     biggest = 0
     max_station = None
     for station in stations:
         if station.docks >= biggest:
             biggest = station.docks
             max_station = station
-    return max_station
+    return max_station.toJSON()
 
-def print_all_stations():
-    for s in stations:
-        print(s)
-
-def main():
-    # main entry point
-    get_station_status()
-    biggest_station = find_biggest_station()
-    print(f"Most bikes: {biggest_station.station_name}, bikes_aval: {biggest_station.bikes_aval}/{biggest_station.docks}")
-    biggest_station_docks = find_biggest_station_docks()
-    print(f"Most docks: {biggest_station_docks.station_name}, bikes_aval: {biggest_station_docks.bikes_aval}/{biggest_station_docks.docks}")
-
-main()
+gen_stations()
+app.run()
