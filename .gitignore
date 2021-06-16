@@ -1,5 +1,9 @@
-# from https://github.com/github/gitignore
+# local files for testing & jsondata
+backend/json_data
+backend/tester.py
 
+  
+# from https://github.com/github/gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

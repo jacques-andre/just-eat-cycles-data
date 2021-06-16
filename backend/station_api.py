@@ -1,29 +1,18 @@
-import requests
 import pprint
 import json
 from flask import Flask, jsonify
 
-r = requests.get(
-    "https://gbfs.urbansharing.com/edinburghcyclehire.com/station_status.json"
-)
-station_status_json = r.json()
+station_status_json = open("json_data/station_status.json")
+station_information_json = open("json_data/station_information.json")
 
-r = requests.get(
-    "https://gbfs.urbansharing.com/edinburghcyclehire.com/station_information.json"
-)
-station_information_json = r.json()
-
-station_data = station_status_json["data"]["stations"]  # avaliable bikes,docks
-station_info = station_information_json["data"][
+station_data = json.load(station_status_json)["data"]["stations"]  # avaliable bikes,docks
+station_info = json.load(station_information_json)["data"][
     "stations"
 ]  # station name,lat/lon,address
 
-
 stations = list()  # holds Station objects for each station
 
-
 app = Flask(__name__)
-
 
 class Station(object):
     bikes_aval = 0
@@ -62,6 +51,7 @@ def get_station_name(station_id: int) -> str:
 
 def gen_stations():
     # aggregates all stations from api into objects
+    stations.clear()
     for station in station_data:
         # station vars
         station_id = int(station["station_id"])
@@ -114,6 +104,5 @@ def find_biggest_station_docks():
             max_station = station
     return max_station.toJSON()
 
-
-gen_stations()
+gen_stations() # populate stations initially 
 app.run()
