@@ -2,6 +2,7 @@ import requests
 import pprint
 import json
 from flask import Flask, jsonify
+from operator import attrgetter
 
 r = requests.get(
     "https://gbfs.urbansharing.com/edinburghcyclehire.com/station_status.json"
