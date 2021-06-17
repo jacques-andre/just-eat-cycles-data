@@ -1,6 +1,6 @@
 # local files for testing & jsondata
 backend/json_data
-backend/run_server.py
+backend/json_update.py
 
   
 # from https://github.com/github/gitignore

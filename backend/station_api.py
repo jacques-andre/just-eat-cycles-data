@@ -140,6 +140,7 @@ def biggest_station_docks():
 
 @app.route("/station/<station_identifier>")
 def get_station(station_identifier):
+    refresh_json_data()
     # returns a station by station id or station name
 
     # check if id (int) or name (str) passed
