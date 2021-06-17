@@ -1,5 +1,6 @@
-import pprint
+import time
 import json
+from termcolor import cprint
 from flask import Flask, jsonify
 
 station_status_json = open("json_data/station_status.json")
@@ -37,6 +38,28 @@ class Station(object):
             "docks": self.docks,
         }
 
+def refresh_json_data():
+    # "refreshes" the latest data from local json file
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    cprint(f"refreshed json data.. ({current_time})","yellow")
+
+    global station_status_json
+    global station_information_json
+    global station_data
+    global station_info
+
+    # open json files and parse
+    station_status_json = open("json_data/station_status.json")
+    station_information_json = open("json_data/station_information.json")
+
+    station_data = json.load(station_status_json)["data"]["stations"]  # avaliable bikes,docks
+    station_info = json.load(station_information_json)["data"][
+        "stations"
+    ]  # station name,lat/lon,address
+
+    stations.clear() # clear what as initially in stations before generating new data
+    gen_stations()
 
 def get_station_name(station_id: int) -> str:
     # returns station name from station id
@@ -51,7 +74,6 @@ def get_station_name(station_id: int) -> str:
 
 def gen_stations():
     # aggregates all stations from api into objects
-    stations.clear()
     for station in station_data:
         # station vars
         station_id = int(station["station_id"])
@@ -72,17 +94,19 @@ def make_station_object(bikes_aval, docks, station_name, station_id):
 @app.route("/")
 def all_stations():
     # returns all stations in json format
+    refresh_json_data()
     json_stations = list()
     for s in stations:
         json_stations.append(s.toJSON())
     json_stations.sort(
         key=lambda x: x["bikes_aval"], reverse=True
     )  # sorts in terms of bikes avaliable
-    return json.dumps(json_stations)
+    return json.dumps(json_stations,indent = 4, separators = (',', ': '))
 
 
 @app.route("/biggest_station_bikes")
-def find_biggest_station():
+def biggest_station_bikes():
+    refresh_json_data()
     # returns the biggest station based on how many number of bikes avaliable.
     biggest = 0
     max_station = None
@@ -94,7 +118,8 @@ def find_biggest_station():
 
 
 @app.route("/biggest_station_docks")
-def find_biggest_station_docks():
+def biggest_station_docks():
+    refresh_json_data()
     # returns the biggest station based on how many number of docks avaliable.
     biggest = 0
     max_station = None
@@ -104,5 +129,4 @@ def find_biggest_station_docks():
             max_station = station
     return max_station.toJSON()
 
-gen_stations() # populate stations initially 
 app.run()

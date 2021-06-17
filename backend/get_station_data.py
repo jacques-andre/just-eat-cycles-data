@@ -12,10 +12,10 @@ json_urls = {
 def download_json(json_urls):
     for file, url in json_urls.items():
         print(f"Checking:{file}")
-        if os.path.exists(file):
+        if os.path.isfile(f"json_data/{file}"):
             # if file exist, remove it
             print(f"Exists:{file}")
-            os.remove(file)
+            os.remove(f"json_data/{file}")
         wget.download(
             url, out=f"json_data/{file}", bar=None
         )
