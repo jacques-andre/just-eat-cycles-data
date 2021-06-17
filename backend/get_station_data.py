@@ -16,9 +16,7 @@ def download_json(json_urls):
             # if file exist, remove it
             print(f"Exists:{file}")
             os.remove(f"json_data/{file}")
-        wget.download(
-            url, out=f"json_data/{file}", bar=None
-        )
+        wget.download(url, out=f"json_data/{file}", bar=None)
     print(f"Downloading:{file}")
 
 

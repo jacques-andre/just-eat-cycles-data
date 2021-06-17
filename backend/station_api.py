@@ -6,7 +6,9 @@ from flask import Flask, jsonify
 station_status_json = open("json_data/station_status.json")
 station_information_json = open("json_data/station_information.json")
 
-station_data = json.load(station_status_json)["data"]["stations"]  # avaliable bikes,docks
+station_data = json.load(station_status_json)["data"][
+    "stations"
+]  # avaliable bikes,docks
 station_info = json.load(station_information_json)["data"][
     "stations"
 ]  # station name,lat/lon,address
@@ -14,6 +16,7 @@ station_info = json.load(station_information_json)["data"][
 stations = list()  # holds Station objects for each station
 
 app = Flask(__name__)
+
 
 class Station(object):
     bikes_aval = 0
@@ -38,11 +41,12 @@ class Station(object):
             "docks": self.docks,
         }
 
+
 def refresh_json_data():
     # "refreshes" the latest data from local json file
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
-    cprint(f"refreshed json data.. ({current_time})","yellow")
+    cprint(f"refreshed json data.. ({current_time})", "yellow")
 
     global station_status_json
     global station_information_json
@@ -53,13 +57,16 @@ def refresh_json_data():
     station_status_json = open("json_data/station_status.json")
     station_information_json = open("json_data/station_information.json")
 
-    station_data = json.load(station_status_json)["data"]["stations"]  # avaliable bikes,docks
+    station_data = json.load(station_status_json)["data"][
+        "stations"
+    ]  # avaliable bikes,docks
     station_info = json.load(station_information_json)["data"][
         "stations"
     ]  # station name,lat/lon,address
 
-    stations.clear() # clear initial stations before "refreshing"
+    stations.clear()  # clear initial stations before "refreshing"
     gen_stations()
+
 
 def get_station_name(station_id: int) -> str:
     # returns station name from station id
@@ -90,6 +97,7 @@ def make_station_object(bikes_aval, docks, station_name, station_id):
     station = Station(bikes_aval, docks, station_name, station_id)
     return station
 
+
 # routes
 @app.route("/")
 def all_stations():
@@ -101,7 +109,7 @@ def all_stations():
     json_stations.sort(
         key=lambda x: x["bikes_aval"], reverse=True
     )  # sorts in terms of bikes avaliable
-    return json.dumps(json_stations,indent = 4, separators = (',', ': '))
+    return json.dumps(json_stations, indent=4, separators=(",", ": "))
 
 
 @app.route("/biggest_station_bikes")
@@ -129,7 +137,8 @@ def biggest_station_docks():
             max_station = station
     return max_station.toJSON()
 
-@app.route('/station/<station_identifier>')
+
+@app.route("/station/<station_identifier>")
 def get_station(station_identifier):
     # returns a station by station id or station name
 
@@ -146,5 +155,6 @@ def get_station(station_identifier):
             if station_identifier.lower() in station.station_name.lower():
                 return station.toJSON(), 200
     return "station not found!", 404
+
 
 app.run()
