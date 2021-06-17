@@ -58,7 +58,7 @@ def refresh_json_data():
         "stations"
     ]  # station name,lat/lon,address
 
-    stations.clear() # clear what as initially in stations before generating new data
+    stations.clear() # clear initial stations before "refreshing"
     gen_stations()
 
 def get_station_name(station_id: int) -> str:
@@ -90,7 +90,7 @@ def make_station_object(bikes_aval, docks, station_name, station_id):
     station = Station(bikes_aval, docks, station_name, station_id)
     return station
 
-
+# routes
 @app.route("/")
 def all_stations():
     # returns all stations in json format
@@ -128,5 +128,23 @@ def biggest_station_docks():
             biggest = station.docks
             max_station = station
     return max_station.toJSON()
+
+@app.route('/station/<station_identifier>')
+def get_station(station_identifier):
+    # returns a station by station id or station name
+
+    # check if id (int) or name (str) passed
+    try:
+        # station_identifier is an id
+        station_id = int(station_identifier)
+        for station in stations:
+            if station.station_id == station_id:
+                return station.toJSON(), 200
+    except:
+        # station_identifier is a name
+        for station in stations:
+            if station_identifier.lower() in station.station_name.lower():
+                return station.toJSON(), 200
+    return "station not found!", 404
 
 app.run()
