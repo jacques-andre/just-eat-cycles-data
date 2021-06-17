@@ -19,5 +19,5 @@ Endpoint               Methods  Rule
 all_stations           GET      /
 biggest_station_bikes  GET      /biggest_station_bikes
 biggest_station_docks  GET      /biggest_station_docks
-get_station            GET      /station/<station_identifier>
+get_station            GET      /station/<station_identifier> refers to station name or id
 ```
