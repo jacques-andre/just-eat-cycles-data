@@ -2,6 +2,8 @@
 backend/json_data
 backend/json_update.py
 
+# js
+frontend/node_modules
   
 # from https://github.com/github/gitignore
 # Byte-compiled / optimized / DLL files

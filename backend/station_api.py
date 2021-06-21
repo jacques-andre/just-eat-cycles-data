@@ -99,7 +99,7 @@ def make_station_object(bikes_aval, docks, station_name, station_id):
 
 
 # routes
-@app.route("/")
+@app.route("/stations")
 def all_stations():
     # returns all stations in json format
     refresh_json_data()
