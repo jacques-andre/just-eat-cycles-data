@@ -5,7 +5,6 @@ from flask import Flask, jsonify
 
 station_status_json = open("json_data/station_status.json")
 station_information_json = open("json_data/station_information.json")
-
 station_data = json.load(station_status_json)["data"][
     "stations"
 ]  # avaliable bikes,docks
@@ -123,6 +122,22 @@ def biggest_station_bikes():
             biggest = station.bikes_aval
             max_station = station
     return max_station.toJSON()
+
+
+@app.route("/stations_aval")
+def stations_aval():
+    refresh_json_data()
+    # return all stations aval
+    station_count = {"bikes": 0, "docks": 0, "percent": 0}
+
+    for station in stations:
+        print(f"current bikes aval {station.bikes_aval}")
+        station_count["bikes"] += int(station.bikes_aval)
+        station_count["docks"] += int(station.docks)
+
+    station_count["percent"] = round((station_count["bikes"] / station_count["docks"]) * 100,2)
+
+    return jsonify(station_count)
 
 
 @app.route("/biggest_station_docks")

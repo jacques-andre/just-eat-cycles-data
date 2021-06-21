@@ -20,6 +20,7 @@ function App() {
 
   return(
     <div className="container">
+      <h2>Station Map</h2>
       <Stations isLoading={isLoading} stations={stations}/>
     </div>
   );

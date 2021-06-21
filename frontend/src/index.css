@@ -6,10 +6,26 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+h3{
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container h2{
+  font-size: 2rem;
+}
 
 .station-wrapper{
   display: grid;
 }
+
 .station-card{
   display: inline-flex;
   justify-content: center;
@@ -18,12 +34,21 @@ body {
   background-color: #616161;
   color: white;
   text-align: center;
-  padding: 5px;
-  margin: 5px;
-  width: 150px;
+  padding: 25px;
+  width: 250px;
+  margin: 20px;
 }
 
 #bikes-aval{
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
+}
+.stations-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-flow: row wrap;
+  align-content: flex-end;
 }
