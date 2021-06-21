@@ -2,7 +2,7 @@
 import React from "react"
 import '../index.css';
 
-const Stations = ({ stations, isLoading }) => {
+const Stations = ({ stations, allBikes, isLoading }) => {
     return isLoading ? (<h1>Loading...</h1>) : (<div className="stations-wrapper">
         {stations.map(station => (
                 <div className="station-card">

@@ -5,8 +5,9 @@ import './index.css';
 import Stations from "./components/Stations"
 
 function App() {
-  const [stations,setStations] = useState([]);
+  const [stations,setStations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [allBikes,setAllBikes] = useState()
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -15,13 +16,19 @@ function App() {
       setStations(result.data)
       setIsLoading(false)
     }
+    const fetchAllBikes = async () => {
+      const result = await axios(`/stations_aval`)
+      setAllBikes(result.data)
+      setIsLoading(false)
+    }
     fetchStations()
+    fetchAllBikes()
   },[])
 
   return(
     <div className="container">
       <h2>Station Map</h2>
-      <Stations isLoading={isLoading} stations={stations}/>
+      <Stations isLoading={isLoading} stations={stations} allBikes={allBikes}/>
     </div>
   );
 }
