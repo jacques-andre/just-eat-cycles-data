@@ -1,28 +1,26 @@
-import React from 'react';
-import './App.css';
+// This is the main entry point of the frontend. All data is fetched from here and then outsourced to other components.
+import React, { useEffect,useState } from 'react';
+import axios from "axios";
+import './index.css';
+import Stations from "./components/Stations"
 
 function App() {
-  const [biggestStationName, setBiggestStationName] = React.useState();
+  const [stations,setStations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
 
-  fetch('/biggest_station_bikes')
-    .then(res => res.json())
-    .then((data) => {
-      setBiggestStationName(data['station_name'])
-    })
-    .catch(console.log)
+  useEffect(() => {
+    const fetchStations = async () => {
+      const result = await axios(`/stations`);
 
-  fetch('/stations')
-    .then(res => res.json())
-    .then((data) => {
-      console.log(data)
-      for (let index = 0; index < data.length; index++) {
-        console.log(data[index]);
-      }
-    })
-    .catch(console.log)
-  return (
-    <div className="App">
-      <h1>Current Biggest Station: {biggestStationName}</h1>
+      setStations(result.data)
+      setIsLoading(false)
+    }
+    fetchStations()
+  },[])
+
+  return(
+    <div className="container">
+      <Stations isLoading={isLoading} stations={stations}/>
     </div>
   );
 }
