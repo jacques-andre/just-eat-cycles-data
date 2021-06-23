@@ -10,6 +10,9 @@ h3{
   margin: 0;
   padding: 0;
 }
+.emoji{
+  font-size: 2rem;
+}
 
 .container{
   display: flex;
@@ -20,10 +23,6 @@ h3{
 
 .container h2{
   font-size: 2rem;
-}
-
-.station-wrapper{
-  display: grid;
 }
 
 .station-card{
@@ -44,6 +43,7 @@ h3{
   font-size: 1.8rem;
 }
 .stations-wrapper{
+  max-width: 60vw;
   display: flex;
   align-items: center;
   justify-content: center;
