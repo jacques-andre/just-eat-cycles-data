@@ -28,6 +28,7 @@ function App() {
   return(
     <div className="container">
       <h2>Station Map <span class="emoji">🚲</span></h2>
+      <p>Data updates every 5 min...</p>
       <Stations isLoading={isLoading} stations={stations} allBikes={allBikes}/>
     </div>
   );
