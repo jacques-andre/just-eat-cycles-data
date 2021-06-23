@@ -131,7 +131,6 @@ def stations_aval():
     station_count = {"bikes": 0, "docks": 0, "percent": 0}
 
     for station in stations:
-        print(f"current bikes aval {station.bikes_aval}")
         station_count["bikes"] += int(station.bikes_aval)
         station_count["docks"] += int(station.docks)
 
