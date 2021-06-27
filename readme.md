@@ -32,5 +32,6 @@ Backend API has to be running first.
 
 ```shell
 cd frontend
+npm install
 npm run start
 ```
